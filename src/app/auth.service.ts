@@ -6,7 +6,7 @@ import { firstValueFrom } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   // Cambie por la IP de su servidor Laravel (emulador Android: 10.0.2.2)
-  private apiUrl = 'http://20.20.1.157:8000';
+  private apiUrl = 'http://20.20.1.51:8000/api';
 
   constructor(private http: HttpClient, private router: Router) {}
 

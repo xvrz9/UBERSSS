@@ -1,47 +1,55 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
-import {
-  IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader,
-  IonCardTitle, IonCardContent, IonItem, IonInput, IonButton, IonText
-} from '@ionic/angular';
-import { AuthService } from '../auth.service';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { IonButton, IonContent, IonInput, IonSpinner, NavController } from '@ionic/angular';
+import { AuthService } from '../core/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: true,
-  imports: [
-    FormsModule, RouterLink, IonContent, IonHeader, IonTitle, IonToolbar,
-    IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem,
-    IonInput, IonButton, IonText
-  ],
+  imports: [ReactiveFormsModule, IonContent, IonInput, IonButton, IonSpinner],
 })
 export class LoginPage {
-  login = '';
-  password = '';
-  error = '';
-  loading = false;
+  private auth = inject(AuthService);
+  private nav = inject(NavController);
 
-  constructor(private auth: AuthService, private router: Router) {}
+  readonly form = inject(FormBuilder).nonNullable.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', Validators.required],
+  });
 
-  // Envía credenciales. Endpoint: POST /api/auth/login
-  // Si sale bien, va a /home que redirige según el rol.
-  async onLogin() {
-    this.error = '';
-    if (!this.login || !this.password) {
-      this.error = 'Ingrese correo/teléfono y contraseña';
+  readonly cargando = signal(false);
+  readonly error = signal('');
+
+  readonly cuentasDemo = [
+    { rol: 'Cliente', email: 'cliente@test.com' },
+    { rol: 'Conductor', email: 'conductor@test.com' },
+  ];
+
+  usarCuenta(email: string): void {
+    this.form.setValue({ email, password: '123456' });
+    this.error.set('');
+  }
+
+  ingresar(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
       return;
     }
-    this.loading = true;
-    try {
-      await this.auth.login(this.login, this.password);
-      this.router.navigateByUrl('/home', { replaceUrl: true });
-    } catch (e: any) {
-      this.error = e?.error?.message || 'No se pudo iniciar sesión';
-    } finally {
-      this.loading = false;
-    }
+
+    const { email, password } = this.form.getRawValue();
+    this.cargando.set(true);
+    this.error.set('');
+
+    this.auth.login(email, password).subscribe({
+      next: (usuario) => {
+        this.cargando.set(false);
+        this.nav.navigateRoot(this.auth.rutaInicio(usuario.rol));
+      },
+      error: (e: Error) => {
+        this.cargando.set(false);
+        this.error.set(e.message);
+      },
+    });
   }
 }

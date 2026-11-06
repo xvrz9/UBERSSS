@@ -1,35 +1,59 @@
-<ion-header>
-  <ion-toolbar color="dark">
-    <ion-title>Uber - Iniciar sesión</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="fondo-blanco">
+  <main class="login">
+    <p class="marca">Uber</p>
 
-<ion-content class="ion-padding">
-  <ion-card>
-    <ion-card-header>
-      <ion-card-title>Bienvenido</ion-card-title>
-    </ion-card-header>
+    <h1 class="login__titulo">Inicia sesión</h1>
+    <p class="texto-secundario">Ingresa con tu correo y contraseña.</p>
 
-    <ion-card-content>
-      <ion-item>
-        <ion-input label="Correo o teléfono" labelPlacement="floating" type="text" [(ngModel)]="login"></ion-input>
-      </ion-item>
+    <form class="login__form" [formGroup]="form" (ngSubmit)="ingresar()" novalidate>
+      <ion-input
+        class="campo"
+        formControlName="email"
+        type="email"
+        inputmode="email"
+        autocomplete="email"
+        label="Correo electrónico"
+        labelPlacement="stacked"
+        fill="outline"
+        placeholder="nombre@correo.com"
+        [errorText]="form.controls.email.hasError('required') ? 'Ingresa tu correo' : 'El formato del correo no es válido'"
+      ></ion-input>
 
-      <ion-item>
-        <ion-input label="Contraseña" labelPlacement="floating" type="password" [(ngModel)]="password" (keyup.enter)="onLogin()"></ion-input>
-      </ion-item>
+      <ion-input
+        class="campo"
+        formControlName="password"
+        type="password"
+        autocomplete="current-password"
+        label="Contraseña"
+        labelPlacement="stacked"
+        fill="outline"
+        errorText="Ingresa tu contraseña"
+      ></ion-input>
 
-      @if (error) {
-        <ion-text color="danger"><p>{{ error }}</p></ion-text>
+      @if (error()) {
+        <p class="alerta" role="alert">{{ error() }}</p>
       }
 
-      <ion-button expand="block" class="ion-margin-top" (click)="onLogin()" [disabled]="loading">
-        {{ loading ? 'Ingresando...' : 'Ingresar' }}
+      <ion-button class="boton" type="submit" expand="block" [disabled]="cargando()">
+        @if (cargando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+        } @else {
+          Continuar
+        }
       </ion-button>
+    </form>
 
-      <ion-button expand="block" fill="clear" routerLink="/register">
-        ¿No tienes cuenta? Regístrate
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
+    <section class="login__demo">
+      <h2 class="etiqueta-seccion">Cuentas de prueba</h2>
+      @for (cuenta of cuentasDemo; track cuenta.email) {
+        <button type="button" class="login__cuenta" (click)="usarCuenta(cuenta.email)">
+          <span>
+            <strong>{{ cuenta.rol }}</strong>
+            <span class="texto-secundario">{{ cuenta.email }}</span>
+          </span>
+          <span class="texto-secundario">123456</span>
+        </button>
+      }
+    </section>
+  </main>
 </ion-content>

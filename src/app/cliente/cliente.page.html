@@ -1,0 +1,124 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="barra">
+    <div class="barra__contenido">
+      <span class="marca">Uber</span>
+      <ion-button class="boton-texto" fill="clear" (click)="cerrarSesion()">Cerrar sesión</ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo-gris">
+  <main class="pagina">
+    <header class="saludo">
+      <h1>Hola, {{ nombre() }}</h1>
+      <p class="texto-secundario primera-mayuscula">{{ hoy | date: "EEEE, d 'de' MMMM" }}</p>
+    </header>
+
+    <section class="tarjeta">
+      <h2 class="tarjeta__titulo">¿A dónde vas?</h2>
+
+      <div class="ruta">
+        <ion-input
+          id="origen"
+          class="campo"
+          fill="outline"
+          aria-label="Origen"
+          placeholder="Punto de partida"
+          [(ngModel)]="origen"
+          (ngModelChange)="cambioRuta()"
+        >
+          <span slot="start" class="ruta__punto" aria-hidden="true"></span>
+        </ion-input>
+        <ion-input
+          id="destino"
+          class="campo"
+          fill="outline"
+          aria-label="Destino"
+          placeholder="Destino"
+          [(ngModel)]="destino"
+          (ngModelChange)="cambioRuta()"
+          (keyup.enter)="calcularTarifa()"
+        >
+          <span slot="start" class="ruta__punto ruta__punto--destino" aria-hidden="true"></span>
+        </ion-input>
+      </div>
+
+      @if (errorRuta()) {
+        <p class="alerta" role="alert">{{ errorRuta() }}</p>
+      }
+
+      @if (tarifa(); as t) {
+        <div class="tarifa">
+          <div>
+            <p class="tarifa__tipo">Viaje estándar</p>
+            <p class="texto-secundario">{{ t.distanciaKm | number: '1.1-1' }} km · {{ t.minutos }} min aprox.</p>
+          </div>
+          <p class="tarifa__valor">{{ t.valor | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+        </div>
+      }
+
+      <div class="acciones">
+        <ion-button class="boton boton--secundario" expand="block" [disabled]="calculando()" (click)="calcularTarifa()">
+          @if (calculando()) { <ion-spinner name="crescent"></ion-spinner> } @else { Calcular tarifa }
+        </ion-button>
+        <ion-button class="boton" expand="block" [disabled]="!tarifa() || pidiendo() || buscando()" (click)="pedirViaje()">
+          @if (pidiendo()) { <ion-spinner name="crescent"></ion-spinner> } @else { Pedir viaje }
+        </ion-button>
+      </div>
+    </section>
+
+    @if (activo(); as viaje) {
+      <section class="tarjeta">
+        <div class="fila-entre">
+          <h2 class="tarjeta__titulo">Viaje actual</h2>
+          <span class="estado estado--{{ viaje.estado }}">{{ etiquetas[viaje.estado] }}</span>
+        </div>
+
+        <p class="recorrido">{{ viaje.origen }} <span aria-hidden="true">→</span> {{ viaje.destino }}</p>
+
+        @if (viaje.conductor; as c) {
+          <div class="conductor">
+            <div class="conductor__inicial" aria-hidden="true">{{ c.nombre.charAt(0) }}</div>
+            <div class="conductor__datos">
+              <p class="conductor__nombre">{{ c.nombre }}</p>
+              <p class="texto-secundario">{{ c.vehiculo }} · {{ c.placa }}</p>
+            </div>
+            <p class="conductor__eta">{{ c.minutosLlegada }} min</p>
+          </div>
+        } @else {
+          <ion-progress-bar class="progreso" type="indeterminate"></ion-progress-bar>
+          <p class="texto-secundario">Estamos buscando un conductor cerca de ti.</p>
+        }
+
+        <p class="fila-entre total">
+          <span class="texto-secundario">Total</span>
+          <strong>{{ viaje.valor | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+        </p>
+      </section>
+    }
+
+    <section>
+      <h2 class="etiqueta-seccion">Viajes recientes</h2>
+      <div class="tarjeta lista">
+        @if (cargandoViajes()) {
+          <div class="vacio"><ion-spinner name="crescent"></ion-spinner></div>
+        } @else {
+          @for (v of recientes(); track v.id) {
+            <article class="lista__item">
+              <div class="lista__info">
+                <p class="texto-secundario">{{ v.fecha | date: "d MMM, h:mm a" }}</p>
+                <p class="recorrido">{{ v.origen }} <span aria-hidden="true">→</span> {{ v.destino }}</p>
+              </div>
+              <div class="lista__lado">
+                <p class="lista__valor">{{ v.valor | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+                <span class="estado estado--{{ v.estado }}">{{ etiquetas[v.estado] }}</span>
+              </div>
+            </article>
+          } @empty {
+            <p class="vacio texto-secundario">Todavía no tienes viajes.</p>
+          }
+        }
+      </div>
+    </section>
+  </main>
+</ion-content>

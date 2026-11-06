@@ -1,0 +1,76 @@
+.ruta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ruta__punto {
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: var(--app-negro);
+}
+
+.ruta__punto--destino {
+  border-radius: 1px;
+}
+
+.tarifa {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--app-negro);
+  border-radius: var(--app-radio);
+}
+
+.tarifa__tipo {
+  margin: 0 0 2px;
+  font-weight: 600;
+}
+
+.tarifa__valor {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.progreso {
+  margin: 16px 0 10px;
+}
+
+.conductor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.conductor__inicial {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--app-gris-fondo);
+  font-weight: 600;
+}
+
+.conductor__datos {
+  flex: 1;
+}
+
+.conductor__nombre,
+.conductor__eta {
+  margin: 0 0 2px;
+  font-weight: 600;
+}
+
+.total {
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--app-gris-borde);
+}

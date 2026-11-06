@@ -1,188 +1,288 @@
-/*
- * App Global CSS
- * ----------------------------------------------------------------------------
- * Put style rules here that you want to apply globally. These styles are for
- * the entire app and not just one component. Additionally, this file can be
- * used as an entry point to import other CSS/Sass files to be included in the
- * output CSS.
- * For more information on global stylesheets, visit the documentation:
- * https://ionicframework.com/docs/layout/global-stylesheets
- */
-
-/* Core CSS required for Ionic components to work properly */
+/* CSS base de Ionic */
 @import "@ionic/angular/css/core.css";
-
-/* Basic CSS for apps built with Ionic */
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
 @import "@ionic/angular/css/display.css";
-
-/* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
-@import "@ionic/angular/css/float-elements.css";
-@import "@ionic/angular/css/text-alignment.css";
-@import "@ionic/angular/css/text-transformation.css";
-@import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
-/* ===== Dashboards ===== */
-.dash-content {
-  --background: #f2f2f2;
+/* ---------- Base ---------- */
+body {
+  -webkit-font-smoothing: antialiased;
 }
 
-.dash {
-  padding: 16px;
-  max-width: 560px;
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+.fondo-blanco {
+  --background: var(--app-blanco);
+}
+
+.fondo-gris {
+  --background: var(--app-gris-fondo);
+}
+
+.marca {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--app-negro);
+}
+
+.texto-secundario {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--app-gris-texto);
+}
+
+.primera-mayuscula::first-letter {
+  text-transform: uppercase;
+}
+
+.etiqueta-seccion {
+  margin: 28px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--app-gris-texto);
+}
+
+.fila-entre {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ---------- Barra superior ---------- */
+.barra {
+  --background: var(--app-blanco);
+  --border-width: 0 0 1px;
+  --border-color: var(--app-gris-borde);
+  --min-height: 60px;
+}
+
+.barra__contenido {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: var(--app-ancho-max);
   margin: 0 auto;
+  padding: 0 8px;
 }
 
-.dash__tarjeta {
-  background: #fff;
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 14px;
+/* ---------- Layout ---------- */
+.pagina {
+  max-width: var(--app-ancho-max);
+  margin: 0 auto;
+  padding: 24px 16px 48px;
 }
 
-.dash__titulo {
-  margin: 0 0 14px;
+.saludo {
+  margin-bottom: 20px;
+
+  h1 {
+    margin-bottom: 4px;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+.tarjeta {
+  margin-bottom: 12px;
+  padding: 20px;
+  border: 1px solid var(--app-gris-borde);
+  border-radius: var(--app-radio);
+  background: var(--app-blanco);
+}
+
+.tarjeta__titulo {
+  margin-bottom: 16px;
   font-size: 18px;
   font-weight: 600;
-  color: #111;
 }
 
-.dash__texto {
-  margin: 0;
-  font-size: 14px;
-  color: #666;
+.fila-entre > .tarjeta__titulo {
+  margin-bottom: 0;
 }
 
-.dash__etiqueta {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #000;
-  color: #fff;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 10px;
+.recorrido {
+  margin: 10px 0 4px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
 }
 
-.dash__etiqueta--gris {
-  background: #e4e4e4;
-  color: #333;
-}
-
-.dash__monto {
-  margin: 6px 0 2px;
-  font-size: 32px;
-  font-weight: 700;
-  color: #111;
-  letter-spacing: -0.5px;
-}
-
-.dash__linea {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-  color: #111;
-}
-
-.dash__linea:last-child {
-  border-bottom: 0;
-}
-
-.dash__linea span:first-child {
-  color: #666;
-}
-
-.dash__ok {
-  margin: 0 0 14px;
-  padding: 12px 14px;
-  border-radius: 8px;
-  background: #e8f5e9;
-  color: #1b5e20;
-  font-size: 14px;
-}
-
-.dash__select {
-  width: 100%;
-  height: 50px;
-  padding: 0 14px;
-  border: 0;
-  border-radius: 8px;
-  background: #f0f0f0;
-  color: #111;
-  font-size: 16px;
-  font-family: inherit;
-}
-
-.dash__fila-toggle {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dash__metricas {
+.acciones {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-top: 16px;
 }
 
-ion-card.metrica {
-  margin: 0;
-  border-radius: 12px;
-  box-shadow: none;
-  background: #fff;
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 16px;
+  text-align: center;
 }
 
-ion-card.metrica ion-card-content {
-  padding: 14px;
-  color: #111;
-}
-
-.metrica__valor {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-}
-
-.metrica__nombre {
-  margin-top: 2px;
-  font-size: 13px;
-  color: #666;
-}
-
-.dash__botones {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.dash__boton-claro {
-  --background: #f0f0f0;
-  --color: #111;
-  --border-radius: 8px;
+/* ---------- Botones ---------- */
+.boton {
+  --background: var(--app-negro);
+  --background-hover: #000;
+  --background-activated: #333;
+  --color: var(--app-blanco);
+  --border-radius: var(--app-radio);
   --box-shadow: none;
-  height: 46px;
+  height: var(--app-alto-boton);
   margin: 0;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
-  text-transform: none;
   letter-spacing: 0;
+  text-transform: none;
+}
+
+.boton--secundario {
+  --background: var(--app-gris-fondo);
+  --background-hover: var(--app-gris-borde);
+  --background-activated: var(--app-gris-borde);
+  --color: var(--app-negro);
+  --border-width: 1px;
+  --border-style: solid;
+  --border-color: var(--app-gris-borde);
+}
+
+.boton-texto {
+  --color: var(--app-negro);
+  --background-hover: var(--app-gris-fondo);
+  --border-radius: var(--app-radio);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.boton ion-spinner {
+  width: 22px;
+  height: 22px;
+  color: currentColor;
+}
+
+/* ---------- Formularios ---------- */
+ion-input.campo {
+  --border-radius: var(--app-radio);
+  --border-color: var(--app-gris-borde);
+  --highlight-color-focused: var(--app-negro);
+  --highlight-color-valid: var(--app-negro);
+  --highlight-color-invalid: var(--app-error);
+  --padding-start: 14px;
+  min-height: 52px;
+  font-size: 16px;
+}
+
+.alerta {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--app-error);
+  border-radius: 4px;
+  background: #fbeeed;
+  color: var(--app-error);
+  font-size: 14px;
+}
+
+ion-toggle.interruptor {
+  --track-background: var(--app-gris-borde);
+  --track-background-checked: var(--app-negro);
+  --handle-background: var(--app-blanco);
+  --handle-background-checked: var(--app-blanco);
+}
+
+ion-progress-bar {
+  --background: var(--app-gris-borde);
+  --progress-background: var(--app-negro);
+  height: 3px;
+  border-radius: 2px;
+}
+
+ion-spinner {
+  color: var(--app-gris-texto);
+}
+
+/* ---------- Estados ---------- */
+.estado {
+  display: inline-block;
+  padding: 3px 8px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.estado--buscando {
+  border-color: var(--app-gris-borde);
+  background: var(--app-gris-fondo);
+  color: var(--app-gris-texto);
+}
+
+.estado--asignado {
+  background: var(--app-negro);
+  color: var(--app-blanco);
+}
+
+.estado--completado {
+  background: var(--app-exito-fondo);
+  color: var(--app-exito);
+}
+
+.estado--cancelado {
+  border-color: var(--app-gris-borde);
+  color: var(--app-gris-texto);
+}
+
+/* ---------- Listas ---------- */
+.lista {
+  padding: 0 20px;
+}
+
+.lista__item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--app-gris-borde);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.lista__info .recorrido {
+  margin: 4px 0 0;
+}
+
+.lista__lado {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.lista__valor {
+  font-weight: 600;
+}
+
+@media (max-width: 380px) {
+  .acciones {
+    grid-template-columns: 1fr;
+  }
 }

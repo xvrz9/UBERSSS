@@ -1,0 +1,105 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="barra">
+    <div class="barra__contenido">
+      <span class="marca">Uber</span>
+      <ion-button class="boton-texto" fill="clear" (click)="cerrarSesion()">Cerrar sesión</ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="fondo-gris">
+  <main class="pagina">
+    <header class="saludo">
+      <h1>Hola, {{ nombre() }}</h1>
+      <p class="texto-secundario primera-mayuscula">{{ hoy | date: "EEEE, d 'de' MMMM" }}</p>
+    </header>
+
+    @if (cargando()) {
+      <div class="vacio"><ion-spinner name="crescent"></ion-spinner></div>
+    } @else {
+      <section class="tarjeta fila-entre">
+        <div>
+          <p class="disponibilidad__estado">{{ disponible() ? 'Disponible' : 'No disponible' }}</p>
+          <p class="texto-secundario">
+            {{ disponible() ? 'Estás recibiendo solicitudes de viaje.' : 'No recibirás solicitudes nuevas.' }}
+          </p>
+        </div>
+        <ion-toggle
+          class="interruptor"
+          aria-label="Disponibilidad"
+          [checked]="disponible()"
+          (ionChange)="cambiarDisponibilidad($event.detail.checked)"
+        ></ion-toggle>
+      </section>
+
+      <section class="metricas">
+        <div class="tarjeta metrica">
+          <p class="texto-secundario">Viajes de hoy</p>
+          <p class="metrica__valor">{{ resumen().viajes }}</p>
+        </div>
+        <div class="tarjeta metrica">
+          <p class="texto-secundario">Ganancias de hoy</p>
+          <p class="metrica__valor">{{ resumen().ganancias | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+        </div>
+      </section>
+
+      @if (enCurso(); as viaje) {
+        <section class="tarjeta">
+          <div class="fila-entre">
+            <h2 class="tarjeta__titulo">Viaje en curso</h2>
+            <span class="estado estado--asignado">En curso</span>
+          </div>
+          <p class="solicitud__pasajero">{{ viaje.pasajero }}</p>
+          <p class="recorrido">{{ viaje.origen }} <span aria-hidden="true">→</span> {{ viaje.destino }}</p>
+          <p class="fila-entre total">
+            <span class="texto-secundario">{{ viaje.distanciaKm | number: '1.1-1' }} km</span>
+            <strong>{{ viaje.valor | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+          </p>
+          <ion-button class="boton" expand="block" [disabled]="procesando() === viaje.id" (click)="finalizar(viaje.id)">
+            @if (procesando() === viaje.id) { <ion-spinner name="crescent"></ion-spinner> } @else { Finalizar viaje }
+          </ion-button>
+        </section>
+      }
+
+      <section>
+        <h2 class="etiqueta-seccion">Solicitudes</h2>
+
+        @if (!disponible()) {
+          <p class="tarjeta vacio texto-secundario">Activa tu disponibilidad para recibir solicitudes.</p>
+        } @else {
+          @if (enCurso() && pendientes().length) {
+            <p class="aviso texto-secundario">Finaliza el viaje en curso para aceptar otra solicitud.</p>
+          }
+
+          @for (s of pendientes(); track s.id) {
+            <article class="tarjeta solicitud">
+              <div class="fila-entre">
+                <p class="solicitud__pasajero">{{ s.pasajero }}</p>
+                <p class="solicitud__valor">{{ s.valor | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+              </div>
+              <p class="recorrido">{{ s.origen }} <span aria-hidden="true">→</span> {{ s.destino }}</p>
+              <p class="texto-secundario">{{ s.distanciaKm | number: '1.1-1' }} km</p>
+              <div class="acciones">
+                <ion-button class="boton boton--secundario" expand="block" [disabled]="procesando() !== null" (click)="rechazar(s.id)">
+                  Rechazar
+                </ion-button>
+                <ion-button class="boton" expand="block" [disabled]="procesando() !== null || !!enCurso()" (click)="aceptar(s.id)">
+                  Aceptar
+                </ion-button>
+              </div>
+            </article>
+          } @empty {
+            @if (!enCurso()) {
+              <div class="tarjeta vacio">
+                <p class="texto-secundario">No hay solicitudes nuevas.</p>
+                <ion-button class="boton boton--secundario" [disabled]="buscandoSolicitudes()" (click)="buscarSolicitudes()">
+                  @if (buscandoSolicitudes()) { <ion-spinner name="crescent"></ion-spinner> } @else { Buscar solicitudes }
+                </ion-button>
+              </div>
+            }
+          }
+        }
+      </section>
+    }
+  </main>
+</ion-content>

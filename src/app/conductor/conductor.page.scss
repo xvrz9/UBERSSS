@@ -1,0 +1,40 @@
+.disponibilidad__estado {
+  margin: 0 0 2px;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.metricas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.metrica {
+  margin: 0;
+}
+
+.metrica__valor {
+  margin: 6px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.solicitud__pasajero,
+.solicitud__valor {
+  margin: 0 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.aviso {
+  margin: 0 0 12px;
+}
+
+.total {
+  margin: 14px 0 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--app-gris-borde);
+}
